@@ -92,9 +92,15 @@ str(AllAdjuvants)
 ```{r DraftFigure}
 # assign only the Acetaminophen data to ggplot object ggData
 ggData <- ggplot(AllAdjuvants[AllAdjuvants$Agent=="Acetaminophen",], aes(x=X,y=Y, colour= Surgery)) 
-Fig <- ggData +geom_point() # make a Scatter plot and assign it to Fig
-Fig + theme_bw() # Choose a simple background and render
+# make a Scatter plot and assign it to Fig
+Fig_a <- ggData +geom_point() 
+
+## add the regression line
+Fig_b <- Fig_a + geom_abline(intercept = 0, slope = (-18.67/50), colour="red", size = 1)
+
+# choose a simple background and render
+Fig_b + theme_bw() # choose a simple background and render
 ```
 
 ### Figure 2 Caption
-
+In Figure 2, we reproduce the acetaminophen subplot of Figure 2 of Doleman et al. Each study is represented by a dot. We colored the studies by surgical procedure, according to the adjacent colour legend. If surgery were the best way to explain why studies yield different results, then studies investigating the same surgical procedure should have similar results. Hence the same color dots should be clumped together,(and the green Cholecystectomy studies are somewhat close).  But most studies of the same color (investigating the same procedure) are far apart, for example orthopedic (blue) or hysterectomy (violett) study dots are spread out over the entire range of the plot. By contrast, all studies across all surgery types line up neatly around the red regression line, when we plot the mean reduction in morphine consumption (y-axis) against the baseline risk (baseline morphine consumption in the control group). The conclusion is that a meta-regression controlling for baseline morphine consumption in the control group is superior to stratification by surgery in explaining between study variance in results.
