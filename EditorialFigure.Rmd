@@ -1,0 +1,94 @@
+---
+title: \normalsize Title
+csl: Bibliography/anesthesia-and-analgesia.csl
+fontfamily: pslatex
+output:
+  pdf_document: default
+---
+
+\setlength{\parindent}{0ex}
+
+##### Authors
+
+Michael H. Andreae, M.D., Department of Anesthesiology, Penn State Health Milton S. Hershey Medical Center, Penn State College of Medicine, Hershey. PA
+
+Nathan Pace, PhD., Department of Anesthesiology, Univeristy of Utha, Salt Lake City, UT
+
+##### Corresponding author:
+Michael Andreae, MD, Address: Department of Anesthesiology, Department of Anesthesiology, Penn State Health Milton S. Hershey Medical Center, 500 University Drive, Hershey. PA 17033, Tel: +1 (717) 531 6140, Email: mandreae@pennstatehealth.psu.edu
+
+##### Acknowledgement
+
+We would like to acknowledge Doleman et al for providing the data to generate the figures.
+
+##### Conflicts of Interest: None
+
+##### Keywords:
+analgesic adjuvants, postoperative pain, evidence synthesis, meta-regression, Bayesian statistics
+
+
+\newpage
+\setlength{\parindent}{0ex}
+
+
+```{r, global_options, echo=FALSE}
+suppressWarnings(library(knitr))
+# set options
+opts_chunk$set(fig.width=6, fig.height=4, fig.path='Figs/',
+               echo=FALSE, warning=FALSE, message=FALSE)
+eval_everything=FALSE
+```
+
+
+\newpage
+
+\setlength\parindent{0pt}
+
+# Editorial
+
+
+
+# Figures
+
+```{r GlobalLibraries}
+library(ggplot2)
+```
+
+```{r ImportData, eval=TRUE}
+library(readxl) # read excel file
+
+Acetaminophen <- read_excel("C:/Users/Michael/Downloads/Acetaminophen.xlsx")
+Acetaminophen <- Acetaminophen[-1,] #drop the empty first line
+save(Acetaminophen, file = "data/Acetaminophen.Rdata") #drop the empty first line
+
+NSAIDS2 <- read_excel("C:/Users/Michael/Downloads/NSAIDS2.xlsx")
+NSAIDS2 <- NSAIDS2[-1,] #drop the empty first line
+save(NSAIDS2, file = "data/NSAIDS2.Rdata")
+
+Alpha_2 <- read_excel("C:/Users/Michael/Downloads/Alpha-2.xlsx")
+Alpha_2 <- Alpha_2[-1,] #drop the empty first line
+save(Alpha_2, file = "data/Alpha_2.Rdata")
+```
+
+```{r LoadData, echo=TRUE}
+rm(list=ls())
+load(file = "data/Alpha_2.Rdata")
+load(file = "data/NSAIDS2.Rdata")
+load(file = "data/Acetaminophen.Rdata")
+
+str(Acetaminophen)
+```
+
+## Figure 1
+
+```{r DraftFigure}
+Fig <- ggplot(Acetaminophen, aes(x=X,y=Y))
+Fig+geom_point()
+```
+
+### Figure 1 Caption
+
+## Figure 2
+
+### Figure 2 Caption
+
