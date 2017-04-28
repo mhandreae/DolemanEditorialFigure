@@ -57,38 +57,44 @@ library(ggplot2)
 ```{r ImportData, eval=TRUE}
 library(readxl) # read excel file
 
-Acetaminophen <- read_excel("C:/Users/Michael/Downloads/Acetaminophen.xlsx")
+Acetaminophen <- read_excel("data/Acetaminophen.xlsx")
 Acetaminophen <- Acetaminophen[-1,] #drop the empty first line
+Acetaminophen$Adjuvant <- rep("Acetaminophen",dim(Acetaminophen)[1])
 save(Acetaminophen, file = "data/Acetaminophen.Rdata") #drop the empty first line
 
-NSAIDS2 <- read_excel("C:/Users/Michael/Downloads/NSAIDS2.xlsx")
+NSAIDS2 <- read_excel("data/NSAIDS2.xlsx")
 NSAIDS2 <- NSAIDS2[-1,] #drop the empty first line
+NSAIDS2$Adjuvant <- rep("NSAIDS2",dim(NSAIDS2)[1])
 save(NSAIDS2, file = "data/NSAIDS2.Rdata")
 
-Alpha_2 <- read_excel("C:/Users/Michael/Downloads/Alpha-2.xlsx")
+Alpha_2 <- read_excel("data/Alpha-2.xlsx")
 Alpha_2 <- Alpha_2[-1,] #drop the empty first line
+Alpha_2$Adjuvant <- rep("Alpha_2",dim(Alpha_2)[1]) 
 save(Alpha_2, file = "data/Alpha_2.Rdata")
+
+## Combine all three sets into one
+AllAdjuvants <- rbind(Acetaminophen, NSAIDS2, Alpha_2)
+# factorize surgery type and adjuvant 
+AllAdjuvants$Surgery <- as.factor(AllAdjuvants$`Type of surgery`)
+AllAdjuvants$Agent <- as.factor(AllAdjuvants$Adjuvant)
+
+save(AllAdjuvants, file= "data/AllAdjuvants.Rdata")
 ```
 
-```{r LoadData, echo=TRUE}
+```{r LoadData, eval=TRUE}
 rm(list=ls())
-load(file = "data/Alpha_2.Rdata")
-load(file = "data/NSAIDS2.Rdata")
-load(file = "data/Acetaminophen.Rdata")
-
-str(Acetaminophen)
+load(file = "data/Alladjuvants.Rdata")
+str(AllAdjuvants)
 ```
-
-## Figure 1
-
-```{r DraftFigure}
-Fig <- ggplot(Acetaminophen, aes(x=X,y=Y))
-Fig+geom_point()
-```
-
-### Figure 1 Caption
 
 ## Figure 2
+
+```{r DraftFigure}
+# assign only the Acetaminophen data to ggplot object ggData
+ggData <- ggplot(AllAdjuvants[AllAdjuvants$Agent=="Acetaminophen",], aes(x=X,y=Y, colour= Surgery)) 
+Fig <- ggData +geom_point() # make a Scatter plot and assign it to Fig
+Fig + theme_bw() # Choose a simple background and render
+```
 
 ### Figure 2 Caption
 
