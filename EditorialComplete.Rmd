@@ -2,7 +2,8 @@
 title: \normalsize Title
 csl: Bibliography/anesthesia-and-analgesia.csl
 fontfamily: pslatex
-
+output:
+  word_document: default
 ---
 
 \setlength{\parindent}{0ex}
