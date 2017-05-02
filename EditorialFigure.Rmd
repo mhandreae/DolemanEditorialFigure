@@ -79,6 +79,7 @@ We and the readers may remain somewhat skeptical and cautious about the approach
 
 ## Figure 1
 
+
 ### Figure 1 Caption
 
 In Figure 1 estimates for the mean reduction of morphine equivalent afforded by acetaminophen are shown in a classical forest plot with studies ordered by surgical interventions. The mean reduction of morphine equivalents and their 95% confidence intervals provided by Doleman et al. The later were used to estimate the standard error (Higgins 2011). The figure was produced with the Cochrane Collaboration software RevMan (RevMan 2014). The 25 RCTs estimate variable and inconsistent effects for the drug under investigation (acetaminophen), varying widely even within the same surgery.
