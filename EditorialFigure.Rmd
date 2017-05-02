@@ -115,7 +115,14 @@ ggData <- ggplot(AllAdjuvants[AllAdjuvants$Agent=="Acetaminophen",], aes(x=X,y=Y
 Fig_a <- ggData +geom_point() 
 
 ## add the regression line and the 50mg vertical line 
-Fig_b <- Fig_a + geom_abline(intercept = 0, slope = (-18.67/50), colour="red", size = 1) + geom_vline(xintercept = 50)
+
+CI95 <- 3
+regression_intercept <- 0.77
+Fig_b <- Fig_a + geom_abline(intercept = regression_intercept, slope = (-0.38), colour="red", size = 1) + 
+  geom_vline(xintercept = 50) +
+  geom_abline(intercept = (regression_intercept + CI95), slope = (-0.38), colour="blue", linetype = "dashed") +
+  geom_abline(intercept = (regression_intercept - CI95), slope = (-0.38), colour="blue", linetype = "dashed")
+
 
 Fig_c <- Fig_b + labs(x = "baseline morphine consumption in control group [mg]", y = "mean morphine-equivalent reduction [mg]")
 # choose a simple background and render
