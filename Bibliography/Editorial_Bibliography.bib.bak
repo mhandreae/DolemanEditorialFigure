@@ -1658,9 +1658,18 @@
   author    = {Higgins, J. P. T. and Deek, Jonathan J.},
   title     = {Chapter 7: Selecting studies and collecting data},
   booktitle = {Cochrane Handbook for Systematic Reviews of Interventions 5.1.0 [updated March 2011]},
+  publisher = {Cochrane Collaboration},
   year      = {2011},
   editor    = {Higgins, J. P. T. and Green, S.},
   pages     = {Available from www.cochrane--Available from handbook.org},
+}
+
+@Manual{RevMan_software,
+  title        = {Review Manager ({RevMan}) [{Computer program}]},
+  organization = {{The Nordic Cochrane Centre}, The Cochrane Collaboration},
+  address      = {Copenhagen},
+  edition      = {{Version 5.3.}},
+  year         = {2014},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
