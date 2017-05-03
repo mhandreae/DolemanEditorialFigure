@@ -1624,4 +1624,43 @@
   year    = {2017},
 }
 
+@Article{SuttonAbrams2001,
+  author   = {Sutton, A J and Abrams, K R},
+  title    = {{Bayesian methods in meta-analysis and evidence synthesis.}},
+  journal  = {Statistical methods in medical research},
+  year     = {2001},
+  volume   = {10},
+  number   = {4},
+  pages    = {277--303},
+  month    = {aug},
+  abstract = {This paper reviews the use of Bayesian methods in meta-analysis. Whilst there has been an explosion in the use of meta-analysis over the last few years, driven mainly by the move towards evidence-based healthcare, so too Bayesian methods are being used increasingly within medical statistics. Whilst in many meta-analysis settings the Bayesian models used mirror those previously adopted in a frequentist formulation, there are a number of specific advantages conferred by the Bayesian approach. These include: full allowance for all parameter uncertainty in the model, the ability to include other pertinent information that would otherwise be excluded, and the ability to extend the models to accommodate more complex, but frequently occurring, scenarios. The Bayesian methods discussed are illustrated by means of a meta-analysis examining the evidence relating to electronic fetal heart rate monitoring and perinatal mortality in which evidence is available from a variety of sources.},
+  doi      = {10.1177/096228020101000404},
+  issn     = {0962-2802},
+  pmid     = {11491414},
+  url      = {http://journals.sagepub.com/doi/10.1177/096228020101000404 http://www.ncbi.nlm.nih.gov/pubmed/11491414},
+}
+
+@Article{AchanaCooperDiasEtAl2013,
+  author  = {Achana, Felix A. and Cooper, Nicola J. and Dias, Sofia and Lu, Guobing and Rice, Stephen J. C. and Kendrick, Denise and Sutton, Alex J.},
+  title   = {{Extending methods for investigating the relationship between treatment effect and baseline risk from pairwise meta-analysis to network meta-analysis}},
+  journal = {Statistics in Medicine},
+  year    = {2013},
+  volume  = {32},
+  number  = {5},
+  pages   = {752--771},
+  month   = {feb},
+  doi     = {10.1002/sim.5539},
+  issn    = {02776715},
+  url     = {http://doi.wiley.com/10.1002/sim.5539},
+}
+
+@InCollection{HigginsDeek2011,
+  author    = {Higgins, J. P. T. and Deek, Jonathan J.},
+  title     = {Chapter 7: Selecting studies and collecting data},
+  booktitle = {Cochrane Handbook for Systematic Reviews of Interventions 5.1.0 [updated March 2011]},
+  year      = {2011},
+  editor    = {Higgins, J. P. T. and Green, S.},
+  pages     = {Available from www.cochrane--Available from handbook.org},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
