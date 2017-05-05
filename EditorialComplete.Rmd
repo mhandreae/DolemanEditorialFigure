@@ -82,6 +82,7 @@ We and the readers may remain somewhat skeptical and cautious about the approach
 
 ## Figure 1
 
+![Pluto](https://github.com/mhandreae/DolemanEditorialFigure/blob/master/Figs/Schematic_2May.pdf)
 
 ### Figure 1 Caption
 
