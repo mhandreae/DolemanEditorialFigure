@@ -82,6 +82,8 @@ We and the readers may remain somewhat skeptical and cautious about the approach
 
 ## Figure 1
 
+![Figure 1](./Figs/AcetaminophenForestPlot.gif)
+
 
 ### Figure 1 Caption
 
