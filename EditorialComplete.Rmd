@@ -1,5 +1,5 @@
 ---
-title: \normalsize A novel approach to synthesize the evidence on analgesic adjuvants for postoperative pain
+title: \normalsize A Novel Approach to Synthesize the Evidence on Analgesic Adjuvants for Postoperative Pain
 csl: Bibliography/anesthesia-and-analgesia.csl
 fontfamily: pslatex
 output:
@@ -25,6 +25,7 @@ Michael Andreae, MD, Address: Department of Anesthesiology, Department of Anesth
 We would like to acknowledge Doleman et al for providing the data to generate the figures.
 
 ##### Conflicts of Interest: None
+**Number of words in this Editorial (1598), Figures (2)**
 
 ##### Keywords:
 analgesic adjuvants, postoperative pain, evidence synthesis, meta-regression, Bayesian statistics
