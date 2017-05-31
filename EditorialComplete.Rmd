@@ -137,10 +137,13 @@ ggData <- ggplot(AllAdjuvants[AllAdjuvants$Agent=="Acetaminophen",], aes(x=X,y=Y
 Fig_a <- ggData +geom_point(aes(shape=Surgery, colour=Surgery)) +geom_smooth(method='lm',formula=y~x) + geom_vline(xintercept = 50)
 
 # add labels
-Fig_b <- Fig_a + labs(x = "baseline morphine consumption in control group [mg]", y = "mean morphine-equivalent reduction [mg]")
+Fig_b <- Fig_a + labs(x = "baseline morphine consumption in control group [mg]", y = "morphine-equivalent reduction [mg]")
 
 # choose a simple background and render
 Fig_b + theme_bw() # choose a simple background and render
+ggsave("Schematic.tif", device = "tiff", width = 6, 
+       height = 3, units = "in", dpi = 400)
+
 ```
 
 ### Figure 2 Caption
