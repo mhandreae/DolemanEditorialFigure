@@ -1,0 +1,107 @@
+---
+title: "RoM"
+author: "NLP"
+date: "7/18/2017"
+output: pdf_document
+geometry: margin = 0.5in
+latex_engine: xelatex
+word_document: default
+---
+
+This analysis was performed on `r date()`.  
+
+This analysis used the metafor package (`r citation('metafor')`).  
+
+This analysis used the R platform (`r citation()`).  
+
+```{r setup, include = F}
+
+library(knitr)
+use.knitr = T
+knitr::opts_chunk$set(echo = TRUE)
+opts_knit$set(root.dir = '..')
+opts_chunk$set(cache=TRUE)
+options(dplyr.print_min = Inf)
+options(tibble.width = Inf)
+
+```
+
+```{r, include = F}
+
+library(readxl)
+library(magrittr)
+library(tidyverse)
+library(meta)
+library(metafor)
+
+```
+
+\newpage
+# Dataset  
+```{r, echo = F}
+
+RoM.df <- read_excel(path = 'data/RoM.xlsx', sheet = 1, col_names = T)
+
+print(RoM.df)
+
+meta.df <- RoM.df %>%
+  mutate(RoM = log(meanExp/meanCtl),
+         SE = sqrt((1/nExp)*(sdExp/meanExp)^2 + (1/nCtl)*(sdCtl/meanCtl)^2)) %>%
+  filter(!is.na(sdExp))
+  
+studyName <- meta.df %>% select(studyName)
+
+print(meta.df)
+
+```
+
+\newpage
+# Analysis  
+```{r, echo = F}
+
+meta0.rma <- rma.uni(yi = RoM, sei = SE, measure = 'GEN',
+                    data = meta.df, knha = T,
+                    slab = studyName, method = 'REML')
+
+meta1.rma <- rma.uni(yi = RoM, sei = SE, mods = meanCtl, measure = 'GEN',
+                    data = meta.df, knha = T,
+                    slab = studyName, method = 'REML')
+
+meta0.rma
+
+meta1.rma
+
+anova(rma.uni(yi = RoM, sei = SE, measure = 'GEN',
+                    data = meta.df, knha = T,
+                    slab = studyName, method = 'ML'),
+      rma.uni(yi = RoM, sei = SE, mods = meanCtl, measure = 'GEN',
+                    data = meta.df, knha = T,
+                    slab = studyName, method = 'ML'))
+
+```
+
+\newpage
+# Predictions  
+## Model without Moderator  
+## Morphine doses 5 to 75 by 5  
+```{r, echo = F}
+
+predict(object = meta0.rma, trans = exp)
+
+predict(object = meta1.rma, newmods = seq(5, 75, 5), level = 95, digits = 2, transf = exp)
+
+```
+
+\newpage
+# Forest Plot  
+```{r, echo = F}
+
+forest(meta0.rma, transf = exp)
+
+```
+
+```{r, include = F}
+
+save.image('data/meta.Rdata')
+
+```

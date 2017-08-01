@@ -1,0 +1,213 @@
+---
+title: "MV"
+author: "NLP"
+date: "7/18/2017"
+output: pdf_document
+geometry: margin = 0.5in
+latex_engine: xelatex
+word_document: default
+---
+
+This analysis was performed on `r date()`.  
+
+This analysis used the metafor package (`r citation('metafor')`).  
+
+This analysis used the R platform (`r citation()`).  
+
+```{r setup, include = F}
+
+library(knitr)
+use.knitr = T
+knitr::opts_chunk$set(echo = TRUE)
+opts_knit$set(root.dir = '..')
+opts_chunk$set(cache=TRUE)
+options(dplyr.print_min = Inf)
+options(tibble.width = Inf)
+
+```
+
+```{r, include = F}
+
+library(readxl)
+library(magrittr)
+library(forcats)
+library(tidyverse)
+library(meta)
+library(metafor)
+library(ggplot2)
+library(scales)
+library(ellipse)
+
+```
+
+\newpage
+# Dataset  
+```{r, echo = F}
+
+#RoM.df <- read_excel(path = 'Data/RoM.xlsx', sheet = 1, col_names = T)
+
+RoM.df <- read_excel("C:/Users/Michael/Dropbox/Professional/Review for journals/AnesthesiaAnalgesia/2017/DolemanEditorialFigure/data/RoM.xlsx",  
+                  sheet = "Sheet1", 
+                  col_names = T)
+
+
+MV.df <-  filter(RoM.df, !is.na(sdExp))
+
+arm.df <- bind_rows(MV.df %>%
+                      select(studyName, meanExp, sdExp, nExp) %>%
+                      rename(mean = meanExp, sd = sdExp, n = nExp) %>%
+                      mutate(group = 'Exp'),
+                    MV.df %>%
+                      select(studyName, meanCtl, sdCtl, nCtl) %>%
+                      rename(mean = meanCtl, sd = sdCtl, n = nCtl) %>%
+                      mutate(group = 'Ctl')) %>%
+  mutate(group = as_factor(group))
+  
+MV1.df <-select(RoM.df,studyName, meanExp, sdExp, nExp) 
+MV1.df<- dplyr::rename(MV1.df, mean = meanExp)
+, sd = sdExp, n = nExp) 
+                      mutate(group = 'Exp')
+arm.df <- escalc(measure = 'MNLN', mi = mean, sdi = sd, ni = n, data = arm.df)
+
+print(arm.df %>% arrange(studyName))
+
+```
+
+\newpage
+# Multivariate Analysis  
+```{r, echo = T}
+
+arm.rma <- rma.mv(yi = yi, V = vi, mods = ~ group - 1,
+                  random = ~ group | studyName,
+                  struct = 'UN', method = 'ML',
+                    data = arm.df)
+
+arm.rma
+
+```
+
+\newpage
+# Multivariate Analysis (Releveled)  
+```{r, echo = T}
+
+res.rma <- rma.mv(yi = yi, V = vi, mods = ~ relevel(group, ref = 'Ctl'),
+                  random = ~ group | studyName,
+                  struct = 'UN', method = 'ML',
+                    data = arm.df)
+
+res.rma
+
+```
+
+\newpage
+# Scatter Plot  
+```{r, echo = F}
+
+armplot.df <- full_join(arm.df %>%
+                          filter(group == 'Exp') %>% 
+                          select(studyName, yi, vi) %>%
+                          rename(Expyi = yi, Expvi = vi),
+                        arm.df %>%
+                          filter(group == 'Ctl') %>% 
+                          select(studyName, yi, vi) %>%
+                          rename(Ctlyi = yi, Ctlvi = vi),
+                        by = 'studyName')
+armplot.df <- full_join(armplot.df, surgery.df, by = 'studyName')
+
+armplot.df <- armplot.df %>%
+  mutate(wi = sqrt(1 / (Expvi + Ctlvi)))
+
+r <- with(arm.rma, G["Exp","Ctl"] / sqrt(G["Exp","Exp"] * G["Ctl","Ctl"]))
+b1 <- with(arm.rma, G['Exp', 'Ctl'] / G['Ctl', 'Ctl'])
+se.b1 <- sqrt(with(arm.rma, G["Exp","Exp"]/G["Ctl","Ctl"] *
+                     (1-r^2) / (arm.rma$g.levels.comb.k - 2)))
+b0 <- as.vector(coef(arm.rma)[1] - coef(arm.rma)[2] * b1)
+
+mu <- res.rma$beta[2, 1]
+
+tau2 <- arm.rma$G[1, 1] + arm.rma$G[2, 2] - 2 * arm.rma$G[1, 2]
+
+tau2.cond <- arm.rma$G[1, 1] - arm.rma$G[1, 2]^2/arm.rma$G[2, 2]
+
+center.df <- data.frame(x = coef(arm.rma)[2], y = coef(arm.rma)[1])
+
+xy.df <- data.frame(ellipse(arm.rma$G, centre=coef(arm.rma), level=.95, npoints = 10000))
+                        
+ggplot(data = armplot.df) +
+  geom_point(aes(x  = Ctlyi, y = Expyi, colour = surgery, size = wi)) +
+  scale_size_area(max_size = 6) +
+  guides(fill = guide_legend(title = NULL)) +
+  geom_abline(slope = b1, intercept = b0, size = 1.5) +
+  geom_abline(slope = 1, intercept = 0, linetype = 'dashed', size = 1) +
+  geom_point(data = center.df, aes(x = x, y = y), colour = 'green', size = 10) +
+  scale_x_continuous(labels = math_format(exp^.x)) +
+  scale_y_continuous(labels = math_format(exp^.x)) +
+  xlab('Control Group Dose') +
+  ylab('Acetaminophen Group Dose') +
+  geom_point(data = xy.df,
+             aes(x = Ctl, y = Exp, alpha = 0.1, size = 1, colour = 'grey', fill = Ctl)) +
+  guides(fill = guide_legend(title = NULL)) +
+    theme(legend.position = 'none')
+
+
+
+
+
+
+```
+
+\newpage
+# RoM percentage
+# Slope and slope SE regression line log(Exp Mean)/log(Ctl Mean)  
+```{r, echo = F}
+
+paste('logRoM = log(meanExperimental/meanControl)')
+
+paste('Variance-Convariance Matrix of Random Effects')
+arm.rma$G
+
+paste('logRoM Variance (amount of heterogeneity)')
+tau2
+
+paste('Conditional Variance logExperimental or logRoM')
+tau2.cond
+
+paste('Percent between trials heterogeneity of dose reduction explained by baseline risk measured as logControl')
+100 * (tau2 - tau2.cond)/tau2
+
+paste('Average values - exp(logExperimental) and exp(logControl) - of studies')
+exp(coef(arm.rma))
+
+paste('RoM Percentage (100 * Experimental/Control)')
+100 * exp(mu)
+
+paste('RoM Percentage 95% lb')
+100 * exp(res.rma$ci.lb[2])
+
+paste('RoM Percentage 95% ub')
+100 * exp(res.rma$ci.ub[2])
+
+paste('slope logExperimental ~ logControl')
+b1
+
+paste('slope 95% lb')
+b1 - 1.96 * se.b1
+
+paste('slope 95% ub')
+b1 + 1.96 * se.b1
+
+paste('slope statistics')
+round(c(b1 = b1, se.b1 = se.b1, t = b1/se.b1,
+        pval = 2*pt(abs(b1/se.b1), df = arm.rma$g.levels.comb.k-2, lower.tail = F),
+        lb.b1 = b1 - 1.96 * se.b1, ub.b1 = b1 + 1.96 * se.b1), 4)
+
+paste('Correlation of true logmean in Experimental and Control')
+r
+
+```
+
+```{r, include = F}
+
+save.image('Data/MV.Rdata')
+
+```
